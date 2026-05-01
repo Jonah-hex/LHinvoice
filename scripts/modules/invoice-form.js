@@ -162,10 +162,10 @@
       '<input type="text" class="form-control" id="custAddress" value="' +
       F.escapeHtml((inv.customer && inv.customer.address) || "") +
       "\" /></div></div></div>" +
-      '<div class="card" style="margin:1rem 0;border:1px solid var(--color-border)">' +
-      '<div class="card__header" style="padding:0.65rem 1rem"><h3 class="card__title" style="font-size:1rem;margin:0">بنود الفاتورة</h3></div>' +
-      '<div class="card__body" style="padding:0">' +
-      '<div class="table-wrap" style="border:none">' +
+      '<div class="card invoice-lines-card" style="margin:1rem 0;border:1px solid var(--color-border)">' +
+      '<div class="card__header invoice-lines-card__head"><h3 class="card__title invoice-lines-card__title">بنود الفاتورة</h3></div>' +
+      '<div class="card__body invoice-lines-card__body" style="padding:0">' +
+      '<div class="table-wrap invoice-lines-card__table-wrap" style="border:none">' +
       "<table class=\"data-table\" id=\"linesTable\"><thead><tr>" +
       "<th>البيان</th><th>الكمية</th><th>الوحدة</th><th>سعر الوحدة (ر.س)</th><th>الإجمالي</th><th></th>" +
       "</tr></thead><tbody>" +
