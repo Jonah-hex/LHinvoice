@@ -224,36 +224,8 @@
     });
   }
 
-  function render(container, invoiceId) {
-    var inv = S.getInvoiceById(invoiceId);
-    if (!inv) {
-      container.innerHTML =
-        '<div class="empty-state"><p>الفاتورة غير موجودة.</p><a class="btn btn--primary" href="#/invoices">سجل الفواتير</a></div>';
-      return;
-    }
-    var settings = S.getSettings();
-    var fileSafe = String(inv.number).replace(/[^\w\u0600-\u06FF-]+/g, "_") + ".pdf";
-
-    container.innerHTML =
-      '<div class="invoice-print-area">' +
-      '<div class="invoice-actions no-print">' +
-      '<div class="invoice-act-strip" role="toolbar" aria-label="إجراءات الفاتورة">' +
-      '<button type="button" class="btn btn--sm btn--primary" id="btnPrintInv" title="طباعة" aria-label="طباعة">' +
-      '<i class="bi bi-printer invoice-act-ico" aria-hidden="true"></i>' +
-      '<span class="invoice-act-txt">طباعة</span></button>' +
-      '<button type="button" class="btn btn--sm btn--accent" id="btnPdfInv" title="حفظ PDF" aria-label="حفظ PDF">' +
-      '<i class="bi bi-file-earmark-pdf invoice-act-ico" aria-hidden="true"></i>' +
-      '<span class="invoice-act-txt">حفظ PDF</span></button>' +
-      '<button type="button" class="btn btn--sm btn--danger" id="btnDelInv" title="حذف" aria-label="حذف">' +
-      '<i class="bi bi-trash3 invoice-act-ico" aria-hidden="true"></i>' +
-      '<span class="invoice-act-txt">حذف</span></button>' +
-      '<a class="btn btn--sm btn--ghost" href="#/invoices" title="رجوع للسجل" aria-label="رجوع للسجل">' +
-      '<i class="bi bi-journal-text invoice-act-ico" aria-hidden="true"></i>' +
-      '<span class="invoice-act-txt">رجوع للسجل</span></a>' +
-      "</div></div>" +
-      '<div class="invoice-page-wrap">' +
-      renderInvoiceSheet(inv, settings) +
-      "</div></div>";
+  function wireInvoicePreviewChrome(inv, settings, fileSafe, opts) {
+    opts = opts || {};
 
     function mqPrintOnChange(e) {
       if (!e.matches) invoiceA4OutputEnd();
@@ -288,27 +260,29 @@
         });
     };
 
-    document.getElementById("btnDelInv").onclick = function () {
-      var run = function () {
-        S.deleteInvoice(inv.id);
-        global.showToast("تم حذف الفاتورة", "info");
-        global.location.hash = "#/invoices";
+    if (!opts.noDelete) {
+      document.getElementById("btnDelInv").onclick = function () {
+        var run = function () {
+          S.deleteInvoice(inv.id);
+          global.showToast("تم حذف الفاتورة", "info");
+          global.location.hash = "#/invoices";
+        };
+        if (global.LHConfirm && global.LHConfirm.show) {
+          global.LHConfirm.show({
+            title: "حذف الفاتورة",
+            message: "هل أنت متأكد من حذف هذه الفاتورة؟ لا يمكن التراجع عن هذا الإجراء.",
+            confirmLabel: "حذف نهائياً",
+            cancelLabel: "إلغاء",
+            danger: true,
+          }).then(function (ok) {
+            if (ok) run();
+          });
+        } else {
+          if (!global.confirm("هل أنت متأكد من حذف هذه الفاتورة؟")) return;
+          run();
+        }
       };
-      if (global.LHConfirm && global.LHConfirm.show) {
-        global.LHConfirm.show({
-          title: "حذف الفاتورة",
-          message: "هل أنت متأكد من حذف هذه الفاتورة؟ لا يمكن التراجع عن هذا الإجراء.",
-          confirmLabel: "حذف نهائياً",
-          cancelLabel: "إلغاء",
-          danger: true,
-        }).then(function (ok) {
-          if (ok) run();
-        });
-      } else {
-        if (!global.confirm("هل أنت متأكد من حذف هذه الفاتورة؟")) return;
-        run();
-      }
-    };
+    }
 
     try {
       if (global.sessionStorage.getItem("lh_print_invoice") === inv.id) {
@@ -326,7 +300,8 @@
       }
     }
     document.addEventListener("keydown", onKeyPrint);
-    container._cleanup = function () {
+
+    return function cleanup() {
       document.removeEventListener("keydown", onKeyPrint);
       window.removeEventListener("beforeprint", invoiceA4OutputStart);
       window.removeEventListener("afterprint", invoiceA4OutputEnd);
@@ -339,6 +314,105 @@
       }
       invoiceA4OutputEnd();
     };
+  }
+
+  /** معاينة مسودة من نموذج الفاتورة (جوال) — داخل التطبيق بدل تبويب PDF. */
+  function renderDraftPreview(container) {
+    var raw = null;
+    try {
+      raw = global.sessionStorage.getItem("lh_invoice_draft_preview");
+    } catch (e) {
+      raw = null;
+    }
+    if (!raw) {
+      container.innerHTML =
+        '<div class="empty-state"><p>لا توجد معاينة مؤقتة.</p><a class="btn btn--primary" href="#/invoice/new">فاتورة جديدة</a></div>';
+      container._cleanup = function () {};
+      return;
+    }
+    var pack = null;
+    try {
+      pack = JSON.parse(raw);
+    } catch (e2) {
+      pack = null;
+    }
+    if (!pack || !pack.inv || !pack.settings) {
+      container.innerHTML =
+        '<div class="empty-state"><p>معاينة غير صالحة.</p><a class="btn btn--primary" href="#/invoice/new">فاتورة جديدة</a></div>';
+      container._cleanup = function () {};
+      return;
+    }
+    var inv = pack.inv;
+    var settings = pack.settings;
+    var returnTo = pack.returnTo || "#/invoice/new";
+    if (!/^#\/invoice\/new$/.test(returnTo)) {
+      returnTo = "#/invoice/new";
+    }
+    var fileSafe = String(inv.number || "preview").replace(/[^\w\u0600-\u06FF-]+/g, "_") + ".pdf";
+
+    container.innerHTML =
+      '<div class="invoice-print-area">' +
+      '<div class="invoice-actions no-print">' +
+      '<div class="invoice-act-strip" role="toolbar" aria-label="معاينة مسودة">' +
+      '<button type="button" class="btn btn--sm btn--primary" id="btnPrintInv" title="طباعة" aria-label="طباعة">' +
+      '<i class="bi bi-printer invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">طباعة</span></button>' +
+      '<button type="button" class="btn btn--sm btn--accent" id="btnPdfInv" title="حفظ PDF" aria-label="حفظ PDF">' +
+      '<i class="bi bi-file-earmark-pdf invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">حفظ PDF</span></button>' +
+      '<a class="btn btn--sm btn--ghost" href="' +
+      F.escapeHtml(returnTo) +
+      '" title="رجوع للتعديل" aria-label="رجوع للتعديل">' +
+      '<i class="bi bi-pencil-square invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">رجوع للتعديل</span></a>' +
+      "</div></div>" +
+      '<div class="invoice-page-wrap">' +
+      renderInvoiceSheet(inv, settings) +
+      "</div></div>";
+
+    var innerCleanup = wireInvoicePreviewChrome(inv, settings, fileSafe, { noDelete: true });
+
+    container._cleanup = function () {
+      innerCleanup();
+      try {
+        global.sessionStorage.removeItem("lh_invoice_draft_preview");
+      } catch (e3) {}
+    };
+  }
+
+  function render(container, invoiceId) {
+    var inv = S.getInvoiceById(invoiceId);
+    if (!inv) {
+      container.innerHTML =
+        '<div class="empty-state"><p>الفاتورة غير موجودة.</p><a class="btn btn--primary" href="#/invoices">سجل الفواتير</a></div>';
+      container._cleanup = function () {};
+      return;
+    }
+    var settings = S.getSettings();
+    var fileSafe = String(inv.number).replace(/[^\w\u0600-\u06FF-]+/g, "_") + ".pdf";
+
+    container.innerHTML =
+      '<div class="invoice-print-area">' +
+      '<div class="invoice-actions no-print">' +
+      '<div class="invoice-act-strip" role="toolbar" aria-label="إجراءات الفاتورة">' +
+      '<button type="button" class="btn btn--sm btn--primary" id="btnPrintInv" title="طباعة" aria-label="طباعة">' +
+      '<i class="bi bi-printer invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">طباعة</span></button>' +
+      '<button type="button" class="btn btn--sm btn--accent" id="btnPdfInv" title="حفظ PDF" aria-label="حفظ PDF">' +
+      '<i class="bi bi-file-earmark-pdf invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">حفظ PDF</span></button>' +
+      '<button type="button" class="btn btn--sm btn--danger" id="btnDelInv" title="حذف" aria-label="حذف">' +
+      '<i class="bi bi-trash3 invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">حذف</span></button>' +
+      '<a class="btn btn--sm btn--ghost" href="#/invoices" title="رجوع للسجل" aria-label="رجوع للسجل">' +
+      '<i class="bi bi-journal-text invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">رجوع للسجل</span></a>' +
+      "</div></div>" +
+      '<div class="invoice-page-wrap">' +
+      renderInvoiceSheet(inv, settings) +
+      "</div></div>";
+
+    container._cleanup = wireInvoicePreviewChrome(inv, settings, fileSafe, { noDelete: false });
   }
 
   /** طباعة فاتورة (بيانات كاملة) في نافذة جديدة — دون حفظ */
@@ -398,6 +472,7 @@
 
   global.LHInvoicePreview = {
     render: render,
+    renderDraftPreview: renderDraftPreview,
     renderInvoiceSheet: renderInvoiceSheet,
     openPrintWindow: openPrintWindow,
   };

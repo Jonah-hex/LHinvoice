@@ -83,6 +83,7 @@
     else if (parts[0] === "invoice") {
       if (parts[1] === "new") route = "invoice-new";
       else if (parts[1] === "edit") route = "invoice-edit";
+      else if (parts[1] === "preview-draft") route = "invoice-view";
       else route = "invoice-view";
     } else if (parts[0] === "invoices") route = "invoices";
     else if (parts[0] === "customers") route = "customers";
@@ -95,7 +96,9 @@
 
     var titleKey = route;
     if (parts[0] === "invoice" && parts[1] === "edit") titleKey = "invoice-edit";
-    if (parts[0] === "invoice" && parts[1] && parts[1] !== "new" && parts[1] !== "edit") titleKey = "invoice-view";
+    if (parts[0] === "invoice" && parts[1] === "preview-draft") titleKey = "invoice-view";
+    if (parts[0] === "invoice" && parts[1] && parts[1] !== "new" && parts[1] !== "edit" && parts[1] !== "preview-draft")
+      titleKey = "invoice-view";
 
     var pt = document.getElementById("pageTitle");
     if (pt) pt.textContent = titles[titleKey] || titles.dashboard;
@@ -133,6 +136,11 @@
     if (first === "invoice") {
       if (parts[1] === "new") {
         window.LHInvoiceForm.render(appContent, null);
+        lastCleanup = appContent._cleanup;
+        return;
+      }
+      if (parts[1] === "preview-draft" && window.LHInvoicePreview && window.LHInvoicePreview.renderDraftPreview) {
+        window.LHInvoicePreview.renderDraftPreview(appContent);
         lastCleanup = appContent._cleanup;
         return;
       }

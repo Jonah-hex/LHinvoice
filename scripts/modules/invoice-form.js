@@ -670,7 +670,26 @@
           global.showToast("فعّلت «فاتورة مختومة» لكن لا توجد صورة ختم في الإعدادات.", "info");
         }
         if (!global.LHInvoicePreview || !global.LHPdf || !global.LHPdf.openElementPdfPreview) {
-          global.showToast("معاينة PDF غير متاحة", "error");
+          global.showToast("معاينة غير متاحة", "error");
+          return;
+        }
+        var useInAppPreview =
+          global.matchMedia && global.matchMedia("(max-width: 900px)").matches;
+        if (useInAppPreview && global.LHInvoicePreview.renderDraftPreview) {
+          try {
+            global.sessionStorage.setItem(
+              "lh_invoice_draft_preview",
+              JSON.stringify({
+                inv: draft,
+                settings: settings,
+                returnTo: "#/invoice/new",
+              })
+            );
+          } catch (e) {
+            global.showToast("تعذر تجهيز المعاينة (بيانات كبيرة؟). جرّب تصغير الشعار في الإعدادات.", "error");
+            return;
+          }
+          global.location.hash = "#/invoice/preview-draft";
           return;
         }
         var fileSafe = String(draft.number || "preview").replace(/[^\w\u0600-\u06FF-]+/g, "_") + ".pdf";
