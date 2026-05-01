@@ -82,6 +82,89 @@
     page-break-inside: auto;
     break-inside: auto;
     page-break-after: auto;
+    -webkit-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  /*
+   * Safari/Chrome على الجوال: معاينة الطباعة قد تُظهر تخطيط «الشاشة الضيقة»
+   * (جدول مضغوط، أعمدة بعرض ثابت). نفرض هنا تخطيط الورقة الكامل كما على سطح المكتب.
+   */
+  .invoice-sheet__info-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  .invoice-sheet__header {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    gap: 0.85rem !important;
+  }
+
+  .invoice-sheet__header > div:first-child {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    max-width: 100% !important;
+  }
+
+  .invoice-sheet__type-badge {
+    flex: 0 0 auto !important;
+    align-self: flex-start !important;
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+  }
+
+  .invoice-sheet__lines {
+    width: 100% !important;
+    table-layout: auto !important;
+    font-size: 9.25pt !important;
+    border-collapse: collapse !important;
+  }
+
+  .invoice-sheet__lines th,
+  .invoice-sheet__lines td {
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 0.35rem 0.35rem !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    hyphens: manual !important;
+  }
+
+  .invoice-sheet__lines th {
+    white-space: nowrap !important;
+  }
+
+  .invoice-sheet__lines th:nth-child(n),
+  .invoice-sheet__lines td:nth-child(n) {
+    width: auto !important;
+  }
+
+  .invoice-sheet__lines .num {
+    white-space: nowrap !important;
+  }
+
+  .invoice-sheet__summary {
+    display: flex !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+    margin-bottom: 0.7rem !important;
+  }
+
+  .invoice-sheet__summary-table {
+    width: 260px !important;
+    max-width: 100% !important;
+    table-layout: auto !important;
+  }
+
+  .invoice-sheet__summary-table td:first-child,
+  .invoice-sheet__summary-table td:last-child {
+    width: auto !important;
+    word-break: normal !important;
   }
 
   @page {
