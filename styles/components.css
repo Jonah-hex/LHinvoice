@@ -468,6 +468,34 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+/*
+ * غلاف حقول type="date": Safari/WebKit يعطي الحقل عرضاً داخلياً كبيراً في RTL
+ * فيخرج عن الحاوية؛ flex + min-width:0 يضبطه بمقاس بقية الحقول.
+ */
+.invoice-date-shell {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.invoice-date-shell > input[type="date"].form-control {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  direction: ltr;
+  text-align: right;
+}
+
+.invoice-date-shell > input[type="date"].form-control::-webkit-datetime-edit-fields-wrapper {
+  max-width: 100%;
+  padding-inline: 0.05rem;
+}
+
 .invoice-grid__taxRow .form-check {
   align-items: flex-start;
 }
@@ -533,12 +561,6 @@
     max-width: 100%;
     min-width: 0;
     box-sizing: border-box;
-  }
-
-  .invoice-form .form-grid .form-group input[type="date"].form-control {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
   }
 }
 

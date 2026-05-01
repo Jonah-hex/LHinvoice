@@ -111,13 +111,15 @@
       '" readonly aria-readonly="true" />' +
       "</div>" +
       '<div class="form-group"><label class="form-label">تاريخ الإصدار</label>' +
+      '<div class="invoice-date-shell">' +
       '<input type="date" class="form-control" name="issueDate" id="issueDate" value="' +
       F.escapeHtml((inv.issueDate || "").slice(0, 10)) +
-      "\" /></div>" +
+      '" /></div></div>' +
       '<div class="form-group"><label class="form-label">تاريخ الاستحقاق</label>' +
+      '<div class="invoice-date-shell">' +
       '<input type="date" class="form-control" name="dueDate" id="dueDate" value="' +
       F.escapeHtml((inv.dueDate || "").slice(0, 10)) +
-      '" /></div></div>' +
+      '" /></div></div></div>' +
       '<div class="form-grid invoice-grid--pick" style="margin-top:0.75rem">' +
       '<div class="form-group invoice-form__customerSelect"><label class="form-label">اختيار عميل</label>' +
       '<div class="customer-combobox">' +
