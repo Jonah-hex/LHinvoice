@@ -782,6 +782,10 @@ textarea.form-control {
   color: var(--color-text-muted);
 }
 
+.badge__abbr {
+  display: none;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -802,6 +806,12 @@ textarea.form-control {
   .data-table th,
   .data-table td {
     padding: 0.55rem 0.7rem;
+  }
+  .data-table--invoices .badge .badge__full {
+    display: none;
+  }
+  .data-table--invoices .badge .badge__abbr {
+    display: inline;
   }
   .filters-bar .form-group {
     min-width: 100%;

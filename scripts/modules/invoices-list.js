@@ -113,7 +113,9 @@
             F.escapeHtml((inv.customer && inv.customer.name) || "—") +
             "</td>" +
             "<td>" +
-            (inv.isTaxInvoice ? '<span class="badge badge--tax">ضريبية</span>' : '<span class="badge badge--simple">عادية</span>') +
+            (inv.isTaxInvoice
+              ? '<span class="badge badge--tax" aria-label="ضريبية"><span class="badge__full" aria-hidden="true">ضريبية</span><span class="badge__abbr" aria-hidden="true">ض</span></span>'
+              : '<span class="badge badge--simple" aria-label="عادية"><span class="badge__full" aria-hidden="true">عادية</span><span class="badge__abbr" aria-hidden="true">ع</span></span>') +
             "</td>" +
             "<td class=\"num\">" +
             F.formatCurrency(inv.total) +
@@ -169,7 +171,7 @@
       "</select></div></div>" +
       '<p id="invSummary" style="font-weight:600;margin-bottom:0.75rem;color:var(--color-primary)"></p>' +
       '<div class="table-wrap">' +
-      '<table class="data-table"><thead><tr>' +
+      '<table class="data-table data-table--invoices"><thead><tr>' +
       "<th>رقم الفاتورة</th><th>التاريخ</th><th>العميل</th><th>النوع</th><th>الإجمالي</th><th class=\"no-print\">إجراءات</th>" +
       "</tr></thead><tbody id=\"invTableBody\"></tbody></table></div></div></div>";
 
