@@ -10,8 +10,10 @@
     taxRate = typeof taxRate === "number" ? taxRate : 0.15;
     var subtotal = 0;
     (lines || []).forEach(function (line) {
-      var qty = Math.max(0, Math.round(Number(line.quantity) || 0));
-      var up = Number(line.unitPrice) || 0;
+      var qty = Number(line.quantity);
+      if (!isFinite(qty) || qty < 0) qty = 0;
+      var up = Number(line.unitPrice);
+      if (!isFinite(up) || up < 0) up = 0;
       subtotal += qty * up;
     });
     subtotal = Math.round(subtotal * 100) / 100;
@@ -27,8 +29,43 @@
     return { id: F.generateId(), description: "", quantity: 1, unit: "", unitPrice: 0 };
   }
 
+  /** يقبل 1.5 أو 1,5 أو ١٫٥ — للكمية والسعر */
+  function parseDecimalInput(raw) {
+    if (raw == null) return null;
+    var t = String(raw).trim();
+    if (t === "") return null;
+    t = F.toLatinDigits(t).replace(/\s/g, "");
+    t = t.replace(/٫/g, ".").replace(/,/g, ".");
+    var n = parseFloat(t);
+    if (isNaN(n) || !isFinite(n)) return null;
+    return n;
+  }
+
   function parseLineQty(input) {
-    return Math.max(0, Math.round(Number(input && input.value) || 0));
+    var v = parseDecimalInput(input && input.value);
+    if (v == null) return 0;
+    return Math.max(0, v);
+  }
+
+  function parseLinePrice(input) {
+    var v = parseDecimalInput(input && input.value);
+    if (v == null) return 0;
+    return Math.max(0, v);
+  }
+
+  function qtyForInputField(lineQty) {
+    var v = Number(lineQty);
+    if (!isFinite(v) || v <= 0) return "1";
+    if (v % 1 === 0) return String(Math.round(v));
+    var s = String(Math.round(v * 1e6) / 1e6);
+    return s.replace(/(\.\d*?[1-9])0+$/, "$1").replace(/\.0+$/, "");
+  }
+
+  function priceForInputField(unitPrice) {
+    var n = Number(unitPrice);
+    if (!isFinite(n) || n === 0) return "";
+    var s = n % 1 === 0 ? String(Math.round(n)) : String(Math.round(n * 1e4) / 1e4);
+    return s.replace(/(\.\d*?[1-9])0+$/, "$1").replace(/\.0+$/, "");
   }
 
   /** أرقام لاتينية فقط؛ 966xxxxxxxx ← يُختصر إلى صيغة محلية تبدأ بـ 0 */
@@ -67,14 +104,14 @@
           "<td><input type=\"text\" class=\"form-control line-desc\" placeholder=\"البيان / وصف العمل\" value=\"" +
           F.escapeHtml(line.description) +
           "\" /></td>" +
-          "<td><input type=\"number\" min=\"0\" step=\"1\" class=\"form-control line-qty\" value=\"" +
-          Math.max(0, Math.round(Number(line.quantity) || 0)) +
+          "<td><input type=\"text\" class=\"form-control line-qty\" inputmode=\"decimal\" autocomplete=\"off\" placeholder=\"مثال: 1,5\" value=\"" +
+          F.escapeHtml(qtyForInputField(line.quantity)) +
           "\" /></td>" +
           "<td><input type=\"text\" class=\"form-control line-unit\" inputmode=\"text\" placeholder=\"م²، حبة…\" value=\"" +
           F.escapeHtml(line.unit != null ? String(line.unit) : "") +
           "\" /></td>" +
-          "<td><input type=\"number\" min=\"0\" step=\"0.01\" class=\"form-control line-price\" value=\"" +
-          line.unitPrice +
+          "<td><input type=\"text\" class=\"form-control line-price\" inputmode=\"decimal\" autocomplete=\"off\" placeholder=\"0.00\" value=\"" +
+          F.escapeHtml(priceForInputField(line.unitPrice)) +
           "\" /></td>" +
           "<td class=\"line-total-cell num\">0</td>" +
           "<td class=\"lines-actions-cell\"><button type=\"button\" class=\"btn btn--ghost btn--sm btn-remove-line\" title=\"حذف\">✕</button></td>" +
@@ -208,7 +245,7 @@
         description: tr.querySelector(".line-desc").value.trim(),
         quantity: parseLineQty(tr.querySelector(".line-qty")),
         unit: unitEl ? unitEl.value.trim() : "",
-        unitPrice: Number(tr.querySelector(".line-price").value) || 0,
+        unitPrice: parseLinePrice(tr.querySelector(".line-price")),
       });
     });
     return lines;
@@ -220,7 +257,7 @@
     var lines = gatherLines(tbody);
     tbody.querySelectorAll("tr").forEach(function (tr) {
       var qty = parseLineQty(tr.querySelector(".line-qty"));
-      var up = Number(tr.querySelector(".line-price").value) || 0;
+      var up = parseLinePrice(tr.querySelector(".line-price"));
       var lt = Math.round(qty * up * 100) / 100;
       var cents = Math.round(lt * 100) % 100;
       tr.querySelector(".line-total-cell").textContent = F.formatNumber(
@@ -316,9 +353,9 @@
         tr.setAttribute("data-line-id", id);
         tr.innerHTML =
           "<td><input type=\"text\" class=\"form-control line-desc\" placeholder=\"البيان\" /></td>" +
-          "<td><input type=\"number\" min=\"0\" step=\"1\" class=\"form-control line-qty\" value=\"1\" /></td>" +
+          "<td><input type=\"text\" class=\"form-control line-qty\" inputmode=\"decimal\" autocomplete=\"off\" placeholder=\"مثال: 1,5\" value=\"1\" /></td>" +
           "<td><input type=\"text\" class=\"form-control line-unit\" inputmode=\"text\" placeholder=\"م²، حبة…\" /></td>" +
-          "<td><input type=\"number\" min=\"0\" step=\"0.01\" class=\"form-control line-price\" value=\"0\" /></td>" +
+          "<td><input type=\"text\" class=\"form-control line-price\" inputmode=\"decimal\" autocomplete=\"off\" placeholder=\"0.00\" value=\"\" /></td>" +
           "<td class=\"line-total-cell num\">0</td>" +
           "<td><button type=\"button\" class=\"btn btn--ghost btn--sm btn-remove-line\">✕</button></td>";
         tbody.appendChild(tr);
