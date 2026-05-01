@@ -190,6 +190,40 @@
     );
   }
 
+  /** نفس class تصدير الـPDF — يُلغى zoom معاينة الجوال مؤقتًا أثناء الطباعة أو اللقطة. */
+  var INVOICE_A4_CLASS = "lh-pdf-capture";
+  var invoiceA4FallbackTimer = null;
+
+  function invoiceA4OutputEnd() {
+    if (invoiceA4FallbackTimer) {
+      global.clearTimeout(invoiceA4FallbackTimer);
+      invoiceA4FallbackTimer = null;
+    }
+    try {
+      document.documentElement.classList.remove(INVOICE_A4_CLASS);
+    } catch (e) {}
+  }
+
+  function invoiceA4OutputStart() {
+    document.documentElement.classList.add(INVOICE_A4_CLASS);
+  }
+
+  function scheduleInvoiceA4FallbackEnd() {
+    if (invoiceA4FallbackTimer) global.clearTimeout(invoiceA4FallbackTimer);
+    invoiceA4FallbackTimer = global.setTimeout(invoiceA4OutputEnd, 4000);
+  }
+
+  /** طباعة: تخطيط A4 حقيقي أثناء معاينة الطباعة فقط، ثم إرجاع زوم الشاشة. */
+  function printInvoiceWithA4Layout() {
+    invoiceA4OutputStart();
+    scheduleInvoiceA4FallbackEnd();
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        window.print();
+      });
+    });
+  }
+
   function render(container, invoiceId) {
     var inv = S.getInvoiceById(invoiceId);
     if (!inv) {
@@ -221,8 +255,22 @@
       renderInvoiceSheet(inv, settings) +
       "</div></div>";
 
+    function mqPrintOnChange(e) {
+      if (!e.matches) invoiceA4OutputEnd();
+    }
+    window.addEventListener("beforeprint", invoiceA4OutputStart);
+    window.addEventListener("afterprint", invoiceA4OutputEnd);
+    var mqPrint = global.matchMedia && global.matchMedia("print");
+    if (mqPrint) {
+      if (mqPrint.addEventListener) {
+        mqPrint.addEventListener("change", mqPrintOnChange);
+      } else if (mqPrint.addListener) {
+        mqPrint.addListener(mqPrintOnChange);
+      }
+    }
+
     document.getElementById("btnPrintInv").onclick = function () {
-      window.print();
+      printInvoiceWithA4Layout();
     };
 
     document.getElementById("btnPdfInv").onclick = function () {
@@ -266,7 +314,7 @@
       if (global.sessionStorage.getItem("lh_print_invoice") === inv.id) {
         global.sessionStorage.removeItem("lh_print_invoice");
         setTimeout(function () {
-          window.print();
+          printInvoiceWithA4Layout();
         }, 400);
       }
     } catch (e) {}
@@ -274,12 +322,22 @@
     function onKeyPrint(ev) {
       if ((ev.ctrlKey || ev.metaKey) && ev.key === "p") {
         ev.preventDefault();
-        window.print();
+        printInvoiceWithA4Layout();
       }
     }
     document.addEventListener("keydown", onKeyPrint);
     container._cleanup = function () {
       document.removeEventListener("keydown", onKeyPrint);
+      window.removeEventListener("beforeprint", invoiceA4OutputStart);
+      window.removeEventListener("afterprint", invoiceA4OutputEnd);
+      if (mqPrint) {
+        if (mqPrint.removeEventListener) {
+          mqPrint.removeEventListener("change", mqPrintOnChange);
+        } else if (mqPrint.removeListener) {
+          mqPrint.removeListener(mqPrintOnChange);
+        }
+      }
+      invoiceA4OutputEnd();
     };
   }
 

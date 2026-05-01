@@ -545,8 +545,8 @@
 }
 
 /*
- * أثناء html2canvas فقط (class يُضاف من pdf-export.js):
- * إلغاء zoom معاينة الجوال وعرض A4 كامل حتى يُحفظ PDF بنفس مقاس الورق.
+ * أثناء تصدير PDF أو معاينة الطباعة (class يُضاف من pdf-export.js و invoice-preview.js):
+ * إلغاء zoom معاينة الجوال وعرض A4 كامل؛ يُزال الصنف بعد الانتهاء فتعود الشاشة كما كانت.
  */
 html.lh-pdf-capture .invoice-print-area {
   zoom: 1 !important;
