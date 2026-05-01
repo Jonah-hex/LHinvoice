@@ -543,3 +543,72 @@
     overflow-x: visible;
   }
 }
+
+/*
+ * أثناء html2canvas فقط (class يُضاف من pdf-export.js):
+ * إلغاء zoom معاينة الجوال وعرض A4 كامل حتى يُحفظ PDF بنفس مقاس الورق.
+ */
+html.lh-pdf-capture .invoice-print-area {
+  zoom: 1 !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget.invoice-sheet {
+  width: 210mm !important;
+  max-width: none !important;
+  min-height: auto !important;
+  padding: 11mm 14mm !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__info-row {
+  grid-template-columns: 1fr 1fr !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__header {
+  flex-wrap: nowrap !important;
+  justify-content: space-between !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__header > div:first-child {
+  flex: initial !important;
+  width: auto !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__type-badge {
+  flex: initial !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__summary {
+  display: flex !important;
+  justify-content: flex-end !important;
+  width: 100% !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__summary-table {
+  width: 260px !important;
+  max-width: 100% !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__lines {
+  font-size: 9.25pt !important;
+  table-layout: auto !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__lines th,
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__lines td {
+  padding: 0.35rem 0.35rem !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__lines th:nth-child(n),
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__lines td:nth-child(n) {
+  width: auto !important;
+}
+
+html.lh-pdf-capture #invoicePdfTarget .invoice-sheet__lines .num {
+  white-space: nowrap !important;
+}

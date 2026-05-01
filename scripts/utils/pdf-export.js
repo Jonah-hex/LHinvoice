@@ -3,61 +3,88 @@
  */
 (function (global) {
   function buildPdfFromElement(elementId) {
+    var root = document.documentElement;
+
+    function endPdfCapture() {
+      try {
+        root.classList.remove("lh-pdf-capture");
+      } catch (e) {}
+    }
+
     return new Promise(function (resolve, reject) {
-      var el = document.getElementById(elementId);
-      if (!el) {
-        reject(new Error("عنصر غير موجود"));
-        return;
-      }
-      var JsPDF = global.jspdf && global.jspdf.jsPDF;
-      if (typeof html2canvas === "undefined" || !JsPDF) {
-        reject(new Error("مكتبات PDF غير محمّلة"));
-        return;
-      }
+      root.classList.add("lh-pdf-capture");
 
-      var scale = 2;
-      html2canvas(el, {
-        scale: scale,
-        useCORS: true,
-        logging: false,
-        backgroundColor: "#ffffff",
-      })
-        .then(function (canvas) {
-          var imgData = canvas.toDataURL("image/png");
-          var pdf = new JsPDF({
-            orientation: "portrait",
-            unit: "mm",
-            format: "a4",
-          });
-          var pageWidth = pdf.internal.pageSize.getWidth();
-          var pageHeight = pdf.internal.pageSize.getHeight();
-          var imgWidth = pageWidth;
-          var imgHeight = (canvas.height * imgWidth) / canvas.width;
-          // html2canvas قد ينتج فرقاً بسيطاً جداً في الارتفاع (ينشئ صفحة ثانية فارغة).
-          // نعالج ذلك بتسامح صغير قبل التقسيم لصفحات.
-          var EPS_MM = 1.25; // ~1mm هامش سماح
-          if (imgHeight <= pageHeight + EPS_MM) {
-            pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-            resolve(pdf);
-            return;
-          }
+      function runCapture() {
+        var el = document.getElementById(elementId);
+        if (!el) {
+          endPdfCapture();
+          reject(new Error("عنصر غير موجود"));
+          return;
+        }
+        var JsPDF = global.jspdf && global.jspdf.jsPDF;
+        if (typeof html2canvas === "undefined" || !JsPDF) {
+          endPdfCapture();
+          reject(new Error("مكتبات PDF غير محمّلة"));
+          return;
+        }
 
-          var heightLeft = imgHeight;
-          var position = 0;
-
-          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-
-          while (heightLeft > EPS_MM) {
-            position = heightLeft - imgHeight;
-            pdf.addPage();
-            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-          }
-
-          resolve(pdf);
+        var scale = 2;
+        html2canvas(el, {
+          scale: scale,
+          useCORS: true,
+          logging: false,
+          backgroundColor: "#ffffff",
         })
-        .catch(reject);
+          .then(function (canvas) {
+            var imgData = canvas.toDataURL("image/png");
+            var pdf = new JsPDF({
+              orientation: "portrait",
+              unit: "mm",
+              format: "a4",
+            });
+            var pageWidth = pdf.internal.pageSize.getWidth();
+            var pageHeight = pdf.internal.pageSize.getHeight();
+            var imgWidth = pageWidth;
+            var imgHeight = (canvas.height * imgWidth) / canvas.width;
+            // html2canvas قد ينتج فرقاً بسيطاً جداً في الارتفاع (ينشئ صفحة ثانية فارغة).
+            // نعالج ذلك بتسامح صغير قبل التقسيم لصفحات.
+            var EPS_MM = 1.25; // ~1mm هامش سماح
+            if (imgHeight <= pageHeight + EPS_MM) {
+              pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+            } else {
+              var heightLeft = imgHeight;
+              var position = 0;
+
+              pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+              heightLeft -= pageHeight;
+
+              while (heightLeft > EPS_MM) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+              }
+            }
+
+            endPdfCapture();
+            resolve(pdf);
+          })
+          .catch(function (err) {
+            endPdfCapture();
+            reject(err);
+          });
+      }
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          try {
+            runCapture();
+          } catch (e) {
+            endPdfCapture();
+            reject(e);
+          }
+        });
+      });
     });
   }
 
