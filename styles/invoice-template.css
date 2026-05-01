@@ -371,6 +371,30 @@
   .invoice-sheet__info-row {
     grid-template-columns: 1fr;
   }
+
+  /* يمنع تداخل جدول الملخص مع جدول البنود على الجوال/Safari مع zoom */
+  .invoice-sheet__summary {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    clear: both;
+    margin-top: 0.35rem;
+  }
+
+  .invoice-sheet__summary-table {
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+  }
+
+  .invoice-sheet__summary-table td:first-child {
+    width: 58%;
+    word-break: break-word;
+  }
+
+  .invoice-sheet__summary-table td:last-child {
+    width: 42%;
+  }
 }
 
 /* لا يُقصّ المحتوى بعد التصغير عندما تُخفّى السكربتات الأفقية في main.css */

@@ -518,6 +518,30 @@
   }
 }
 
+/* حقول رقم الفاتورة والتواريخ: عرض كامل ومحاذاة مع بقية النموذج على الجوال */
+@media (max-width: 576px) {
+  .invoice-grid--meta .form-group,
+  .invoice-grid--pick > .form-group {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .invoice-grid--meta .form-control,
+  .invoice-grid--pick .form-control:not(.customer-combobox__input) {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .invoice-form .form-grid .form-group input[type="date"].form-control {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
 .form-group {
   margin-bottom: 1rem;
 }
@@ -883,6 +907,36 @@ textarea.form-control {
   text-align: center;
 }
 
+@media (max-width: 576px) {
+  .data-table--customers th.no-print:last-child,
+  .data-table--customers td.no-print {
+    min-width: 0;
+  }
+
+  .cust-row-actions.lh-toolbar-strip {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .cust-row-actions.lh-toolbar-strip > .btn {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-height: 2.5rem;
+    border-inline-start: none !important;
+    border-block-start: 1px solid var(--color-border) !important;
+    white-space: normal;
+    padding: 0.5rem 0.65rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .cust-row-actions.lh-toolbar-strip > .btn:first-child {
+    border-block-start: none !important;
+  }
+}
+
 .chart-container {
   position: relative;
   width: 100%;
@@ -1223,5 +1277,11 @@ textarea.form-control {
     font-size: 0.62rem !important;
     padding: 0.34rem 0.12rem !important;
     min-height: 2rem;
+  }
+
+  .cust-row-actions.lh-toolbar-strip > .btn {
+    font-size: 0.8rem !important;
+    padding: 0.5rem 0.65rem !important;
+    min-height: 2.5rem;
   }
 }
