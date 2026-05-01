@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نظام الفوترة — مؤسسة ليلى حكمي للمقاولات العامة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/shell-dashboard.css" />
+    <link rel="stylesheet" href="styles/components.css" />
+    <link rel="stylesheet" href="styles/invoice-template.css" />
+    <link rel="stylesheet" href="styles/print.css" />
+  </head>
+  <body>
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <div id="lhConfirmRoot" class="lh-confirm-root" hidden aria-hidden="true">
+      <div class="lh-confirm-backdrop"></div>
+      <div class="lh-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="lhConfirmTitle">
+        <h3 id="lhConfirmTitle" class="lh-confirm-title"></h3>
+        <p id="lhConfirmMsg" class="lh-confirm-msg"></p>
+        <div class="lh-confirm-actions">
+          <button type="button" class="btn btn--ghost" id="lhConfirmCancel">إلغاء</button>
+          <button type="button" class="btn btn--danger" id="lhConfirmOk">حذف</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="app-shell" class="shell-v2">
+      <aside class="app-sidebar" id="sidebar" aria-label="القائمة الرئيسية">
+        <div class="app-sidebar__inner">
+          <div class="app-sidebar__identity">
+            <div class="app-sidebar__mark" aria-hidden="true">ل.ح</div>
+            <div class="app-sidebar__brand">
+              <h1 class="app-sidebar__brand-title" id="sidebarCompanyTitle">مؤسسة ليلى حكمي<br />للمقاولات العامة</h1>
+              <p class="app-sidebar__brand-sub" id="sidebarCommercialReg">س.ت: 4030384492</p>
+            </div>
+          </div>
+          <nav class="app-sidebar__nav-block" aria-label="التنقل الرئيسي">
+            <p class="app-sidebar__nav-heading">استكشاف</p>
+            <ul class="app-sidebar__nav">
+              <li>
+                <a href="#/dashboard" data-route="dashboard" class="app-sidebar__nav-link">
+                  <span class="app-sidebar__nav-icon" aria-hidden="true"><i class="bi bi-columns-gap"></i></span>
+                  <span class="app-sidebar__nav-label">لوحة التحكم</span>
+                </a>
+              </li>
+              <li>
+                <a href="#/invoice/new" data-route="invoice-new" class="app-sidebar__nav-link">
+                  <span class="app-sidebar__nav-icon" aria-hidden="true"><i class="bi bi-file-earmark-plus"></i></span>
+                  <span class="app-sidebar__nav-label">فاتورة جديدة</span>
+                </a>
+              </li>
+              <li>
+                <a href="#/invoices" data-route="invoices" class="app-sidebar__nav-link">
+                  <span class="app-sidebar__nav-icon" aria-hidden="true"><i class="bi bi-folder2-open"></i></span>
+                  <span class="app-sidebar__nav-label">سجل الفواتير</span>
+                </a>
+              </li>
+            </ul>
+            <p class="app-sidebar__nav-heading">الأعمال</p>
+            <ul class="app-sidebar__nav">
+              <li>
+                <a href="#/customers" data-route="customers" class="app-sidebar__nav-link">
+                  <span class="app-sidebar__nav-icon" aria-hidden="true"><i class="bi bi-person-lines-fill"></i></span>
+                  <span class="app-sidebar__nav-label">العملاء</span>
+                </a>
+              </li>
+              <li>
+                <a href="#/reports" data-route="reports" class="app-sidebar__nav-link">
+                  <span class="app-sidebar__nav-icon" aria-hidden="true"><i class="bi bi-pie-chart"></i></span>
+                  <span class="app-sidebar__nav-label">التقارير</span>
+                </a>
+              </li>
+            </ul>
+            <p class="app-sidebar__nav-heading">النظام</p>
+            <ul class="app-sidebar__nav">
+              <li>
+                <a href="#/settings" data-route="settings" class="app-sidebar__nav-link">
+                  <span class="app-sidebar__nav-icon" aria-hidden="true"><i class="bi bi-gear-wide-connected"></i></span>
+                  <span class="app-sidebar__nav-label">الإعدادات</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+      <button type="button" class="menu-toggle menu-toggle--sidebar menu-toggle--rail-tab" id="menuToggle" aria-label="القائمة">
+        <span class="menu-toggle__visual menu-toggle__visual--rail" aria-hidden="true">
+          <svg class="menu-toggle__rail-svg" width="11" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M11 8l4 4-4 4M17 8l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <span class="menu-toggle__visual menu-toggle__visual--drawer" aria-hidden="true">
+          <svg class="menu-toggle__dm menu-toggle__dm--menu" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <svg class="menu-toggle__dm menu-toggle__dm--close" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+      </button>
+      <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+
+      <div class="app-main">
+        <header class="app-topbar">
+          <div class="app-topbar__lead">
+            <h2 class="app-topbar__title" id="pageTitle">لوحة التحكم</h2>
+          </div>
+        </header>
+        <main class="app-content" id="appContent"></main>
+      </div>
+    </div>
+
+    <!-- هيكل لوحة التحكم: التصميم في HTML/CSS فقط؛ JS يحدّث الأرقام والصفوف -->
+    <template id="lh-tpl-dashboard">
+      <div class="dash-pro">
+        <header class="dash-pro__head">
+          <div class="dash-pro__headrow dash-pro__headrow--only-meta">
+            <div class="dash-pro__meta">
+              <span id="dashMetaDate"><strong>اليوم</strong> · —</span>
+              <span id="dashMetaCount">0 فاتورة في السجل</span>
+            </div>
+          </div>
+        </header>
+
+        <div class="dash-pro__metrics">
+          <article class="dash-pro-metric">
+            <div class="dash-pro-metric__top">
+              <span class="dash-pro-metric__label">إجمالي الفواتير</span>
+              <i class="bi bi-stack dash-pro-metric__icon" aria-hidden="true"></i>
+            </div>
+            <div id="dashKpiInvoices" class="dash-pro-metric__value">0</div>
+          </article>
+          <article class="dash-pro-metric">
+            <div class="dash-pro-metric__top">
+              <span class="dash-pro-metric__label">إجمالي المبيعات</span>
+              <i class="bi bi-graph-up-arrow dash-pro-metric__icon" aria-hidden="true"></i>
+            </div>
+            <div id="dashKpiSales" class="dash-pro-metric__value">0</div>
+          </article>
+          <article class="dash-pro-metric">
+            <div class="dash-pro-metric__top">
+              <span class="dash-pro-metric__label">ضريبة القيمة المضافة</span>
+              <i class="bi bi-bank dash-pro-metric__icon" aria-hidden="true"></i>
+            </div>
+            <div id="dashKpiVat" class="dash-pro-metric__value">0</div>
+          </article>
+          <article class="dash-pro-metric">
+            <div class="dash-pro-metric__top">
+              <span class="dash-pro-metric__label">مبيعات الشهر الحالي</span>
+              <i class="bi bi-calendar2-week dash-pro-metric__icon" aria-hidden="true"></i>
+            </div>
+            <div id="dashKpiMonth" class="dash-pro-metric__value">0</div>
+            <div id="dashKpiMonthDelta" class="dash-pro-metric__delta dash-pro-metric__delta--neutral" hidden></div>
+          </article>
+        </div>
+
+        <div class="dash-pro__toolbar lh-toolbar-strip" role="group" aria-label="اختصارات سريعة">
+          <a class="btn btn--sm btn--primary" href="#/invoice/new">فاتورة جديدة</a>
+          <a class="btn btn--sm btn--outline" href="#/customers">إدارة العملاء</a>
+          <a class="btn btn--sm btn--accent" href="#/invoices">سجل الفواتير</a>
+          <a class="btn btn--sm btn--outline" href="#/reports">التقارير</a>
+        </div>
+
+        <section class="dash-pro__sheet">
+          <div class="dash-pro-sheet__head">
+            <div class="dash-pro-sheet__lead">
+              <h2 class="dash-pro-sheet__title">أحدث المعاملات</h2>
+              <p class="dash-pro-sheet__hint">آخر خمس فواتير صادرة — انقر للمعاينة</p>
+            </div>
+            <a class="btn btn--ghost btn--sm" href="#/invoices">فتح السجل</a>
+          </div>
+          <div class="dash-pro-table-wrap">
+            <table class="dash-pro-table">
+              <thead>
+                <tr>
+                  <th>رقم الفاتورة</th>
+                  <th>تاريخ الإصدار</th>
+                  <th>العميل</th>
+                  <th>المبلغ</th>
+                </tr>
+              </thead>
+              <tbody id="dashLast"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </template>
+
+    <template id="lh-tpl-dash-row">
+      <tr class="is-clickable" data-id="">
+        <td class="dash-pro-table__mono dash-td-num"></td>
+        <td class="dash-td-date"></td>
+        <td class="dash-td-customer"></td>
+        <td class="dash-pro-table__amount dash-td-amount"></td>
+      </tr>
+    </template>
+
+    <template id="lh-tpl-dash-empty">
+      <tr>
+        <td colspan="4" class="dash-pro-empty">لا توجد فواتير مسجلة بعد. ابدأ بإنشاء أول فاتورة.</td>
+      </tr>
+    </template>
+
+    <script src="lib/jspdf.umd.min.js"></script>
+    <script src="lib/html2canvas.min.js"></script>
+    <script src="lib/chart.umd.min.js"></script>
+    <script src="scripts/storage.js"></script>
+    <script src="scripts/utils/confirm-dialog.js"></script>
+    <script src="scripts/utils/format.js"></script>
+    <script src="scripts/utils/numbering.js"></script>
+    <script src="scripts/utils/pdf-export.js"></script>
+    <script src="scripts/modules/dashboard.js"></script>
+    <script src="scripts/modules/invoice-preview.js"></script>
+    <script src="scripts/modules/invoice-form.js"></script>
+    <script src="scripts/modules/invoices-list.js"></script>
+    <script src="scripts/modules/customers.js"></script>
+    <script src="scripts/modules/reports.js"></script>
+    <script src="scripts/modules/settings.js"></script>
+    <script src="scripts/app.js"></script>
+  </body>
+</html>
