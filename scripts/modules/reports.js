@@ -36,13 +36,15 @@
       '<div class="card__body">' +
       '<div class="filters-bar filters-bar--reports">' +
       '<div class="form-group"><label class="form-label">من</label>' +
+      '<div class="lh-date-shell">' +
       '<input type="date" class="form-control" id="repFrom" value="' +
       from +
-      '" /></div>' +
+      '" /></div></div>' +
       '<div class="form-group"><label class="form-label">إلى</label>' +
+      '<div class="lh-date-shell">' +
       '<input type="date" class="form-control" id="repTo" value="' +
       to +
-      "\" /></div>" +
+      "\" /></div></div>" +
       '<div class="lh-toolbar-strip lh-toolbar-strip--rep">' +
       '<button type="button" class="btn btn--sm btn--primary" id="repApply">تحديث</button>' +
       '<button type="button" class="btn btn--sm btn--outline" id="repCsv">تصدير CSV</button></div></div>' +

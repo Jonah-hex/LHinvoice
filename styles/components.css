@@ -472,7 +472,7 @@
  * غلاف حقول type="date": Safari/WebKit يعطي الحقل عرضاً داخلياً كبيراً في RTL
  * فيخرج عن الحاوية؛ flex + min-width:0 يضبطه بمقاس بقية الحقول.
  */
-.invoice-date-shell {
+.lh-date-shell {
   display: flex;
   width: 100%;
   max-width: 100%;
@@ -480,7 +480,7 @@
   box-sizing: border-box;
 }
 
-.invoice-date-shell > input[type="date"].form-control {
+.lh-date-shell > input[type="date"].form-control {
   flex: 1 1 auto;
   min-width: 0;
   width: 100%;
@@ -491,7 +491,7 @@
   text-align: right;
 }
 
-.invoice-date-shell > input[type="date"].form-control::-webkit-datetime-edit-fields-wrapper {
+.lh-date-shell > input[type="date"].form-control::-webkit-datetime-edit-fields-wrapper {
   max-width: 100%;
   padding-inline: 0.05rem;
 }

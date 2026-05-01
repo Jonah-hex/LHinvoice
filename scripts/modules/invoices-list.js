@@ -153,9 +153,11 @@
       '<option value="tax">ضريبية</option>' +
       '<option value="simple">عادية</option></select></div>' +
       '<div class="form-group"><label class="form-label">من تاريخ</label>' +
-      '<input type="date" class="form-control" id="invFrom" /></div>' +
+      '<div class="lh-date-shell">' +
+      '<input type="date" class="form-control" id="invFrom" /></div></div>' +
       '<div class="form-group"><label class="form-label">إلى تاريخ</label>' +
-      '<input type="date" class="form-control" id="invTo" /></div>' +
+      '<div class="lh-date-shell">' +
+      '<input type="date" class="form-control" id="invTo" /></div></div>' +
       '<div class="form-group"><label class="form-label">ترتيب العرض</label>' +
       '<select class="form-select" id="invSort">' +
       '<option value="issue-desc" selected>تلقائي — تنازلي (الأحدث أولاً)</option>' +
