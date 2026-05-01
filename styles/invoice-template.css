@@ -13,15 +13,63 @@
 }
 
 .invoice-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  display: block;
   margin-top: 0.4rem;
   margin-bottom: 1.05rem;
   padding: 0.85rem 0.9rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
+}
+
+/* شريط إجراءات المعاينة — صف واحد؛ على الجوال أيقونات فقط */
+.invoice-act-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: 0 1px 2px rgba(30, 58, 95, 0.06);
+}
+
+.invoice-act-strip > .btn,
+.invoice-act-strip > a.btn {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 2.35rem;
+  padding: 0.42rem 0.55rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600;
+  border-inline-start: 1px solid var(--color-border) !important;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.invoice-act-strip > .btn:first-child,
+.invoice-act-strip > a.btn:first-child {
+  border-inline-start: none !important;
+}
+
+.invoice-act-strip .invoice-act-ico {
+  display: none;
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.invoice-act-strip .invoice-act-txt {
+  display: inline;
 }
 
 .invoice-sheet {
@@ -394,6 +442,97 @@
 
   .invoice-sheet__summary-table td:last-child {
     width: 42%;
+  }
+
+  /* جدول البنود: عرض ثابت + تفاف نص لتقليل الازدحام على الشاشات الضيقة */
+  .invoice-sheet__lines {
+    table-layout: fixed;
+    font-size: 8.35pt;
+  }
+
+  .invoice-sheet__lines th,
+  .invoice-sheet__lines td {
+    padding: 0.3rem 0.2rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .invoice-sheet__lines th:nth-child(1),
+  .invoice-sheet__lines td:nth-child(1) {
+    width: 5.5%;
+  }
+
+  .invoice-sheet__lines th:nth-child(2),
+  .invoice-sheet__lines td:nth-child(2) {
+    width: 30%;
+  }
+
+  .invoice-sheet__lines th:nth-child(3),
+  .invoice-sheet__lines td:nth-child(3) {
+    width: 10%;
+  }
+
+  .invoice-sheet__lines th:nth-child(4),
+  .invoice-sheet__lines td:nth-child(4) {
+    width: 12%;
+  }
+
+  .invoice-sheet__lines th:nth-child(5),
+  .invoice-sheet__lines td:nth-child(5) {
+    width: 20%;
+  }
+
+  .invoice-sheet__lines th:nth-child(6),
+  .invoice-sheet__lines td:nth-child(6) {
+    width: 17%;
+  }
+
+  .invoice-sheet__lines .num {
+    white-space: normal;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .invoice-actions {
+    padding: 0.45rem 0.35rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .invoice-act-strip .invoice-act-ico {
+    display: inline-block !important;
+    font-size: 1.1rem !important;
+    line-height: 1;
+  }
+
+  .invoice-act-strip .invoice-act-txt {
+    display: none !important;
+  }
+
+  .invoice-act-strip > .btn,
+  .invoice-act-strip > a.btn {
+    font-size: 0 !important;
+    padding: 0.42rem 0.12rem !important;
+    gap: 0;
+  }
+
+  /* شارة نوع الفاتورة تحت عنوان المؤسسة — صف كامل */
+  .invoice-sheet__header {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.55rem;
+  }
+
+  .invoice-sheet__header > div:first-child {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .invoice-sheet__type-badge {
+    flex: 1 1 100%;
+    align-self: center;
+    text-align: center;
+    max-width: 100%;
   }
 }
 

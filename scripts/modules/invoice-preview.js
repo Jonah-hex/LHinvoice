@@ -203,11 +203,19 @@
     container.innerHTML =
       '<div class="invoice-print-area">' +
       '<div class="invoice-actions no-print">' +
-      '<div class="btn-group">' +
-      '<button type="button" class="btn btn--primary" id="btnPrintInv">طباعة</button>' +
-      '<button type="button" class="btn btn--accent" id="btnPdfInv">حفظ PDF</button>' +
-      '<button type="button" class="btn btn--danger" id="btnDelInv">حذف</button>' +
-      '<a class="btn btn--ghost" href="#/invoices">رجوع للسجل</a>' +
+      '<div class="invoice-act-strip" role="toolbar" aria-label="إجراءات الفاتورة">' +
+      '<button type="button" class="btn btn--sm btn--primary" id="btnPrintInv" title="طباعة" aria-label="طباعة">' +
+      '<i class="bi bi-printer invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">طباعة</span></button>' +
+      '<button type="button" class="btn btn--sm btn--accent" id="btnPdfInv" title="حفظ PDF" aria-label="حفظ PDF">' +
+      '<i class="bi bi-file-earmark-pdf invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">حفظ PDF</span></button>' +
+      '<button type="button" class="btn btn--sm btn--danger" id="btnDelInv" title="حذف" aria-label="حذف">' +
+      '<i class="bi bi-trash3 invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">حذف</span></button>' +
+      '<a class="btn btn--sm btn--ghost" href="#/invoices" title="رجوع للسجل" aria-label="رجوع للسجل">' +
+      '<i class="bi bi-journal-text invoice-act-ico" aria-hidden="true"></i>' +
+      '<span class="invoice-act-txt">رجوع للسجل</span></a>' +
       "</div></div>" +
       '<div class="invoice-page-wrap">' +
       renderInvoiceSheet(inv, settings) +
