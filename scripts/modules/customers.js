@@ -265,16 +265,24 @@
             '<div class="cust-row-actions cust-row-actions--toolbar lh-toolbar-strip" role="group" aria-label="إجراءات العميل">' +
             '<button type="button" class="btn btn--sm btn-issue" data-id="' +
             c.id +
-            "\">إصدار فاتورة</button>" +
+            '" title="إصدار فاتورة" aria-label="إصدار فاتورة">' +
+            '<i class="bi bi-file-earmark-plus cust-row-actions__ico" aria-hidden="true"></i>' +
+            '<span class="cust-row-actions__txt">إصدار فاتورة</span></button>' +
             '<button type="button" class="btn btn--sm btn-detail" data-id="' +
             c.id +
-            "\">تفاصيل العميل</button>" +
+            '" title="تفاصيل العميل" aria-label="تفاصيل العميل">' +
+            '<i class="bi bi-person-vcard cust-row-actions__ico" aria-hidden="true"></i>' +
+            '<span class="cust-row-actions__txt">تفاصيل العميل</span></button>' +
             '<button type="button" class="btn btn--sm btn-edit" data-id="' +
             c.id +
-            "\">تعديل</button>" +
+            '" title="تعديل" aria-label="تعديل">' +
+            '<i class="bi bi-pencil-square cust-row-actions__ico" aria-hidden="true"></i>' +
+            '<span class="cust-row-actions__txt">تعديل</span></button>' +
             '<button type="button" class="btn btn--sm btn-del" data-id="' +
             c.id +
-            "\">حذف</button></div></td></tr>"
+            '" title="حذف" aria-label="حذف">' +
+            '<i class="bi bi-trash3 cust-row-actions__ico" aria-hidden="true"></i>' +
+            '<span class="cust-row-actions__txt">حذف</span></button></div></td></tr>'
           );
         })
         .join("");

@@ -884,6 +884,14 @@ textarea.form-control {
   border-inline-start: none;
 }
 
+.cust-row-actions--toolbar .cust-row-actions__ico {
+  display: none;
+}
+
+.cust-row-actions--toolbar .cust-row-actions__txt {
+  display: inline;
+}
+
 .cust-row-actions--toolbar > .btn.btn--sm:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: -2px;
@@ -933,29 +941,51 @@ textarea.form-control {
   .data-table--customers th.no-print:last-child,
   .data-table--customers td.no-print {
     min-width: 0;
+    max-width: 11.5rem;
   }
 
+  /* أيقونات فقط — صف أفقي ضيق حتى يتسع الجدول */
   .cust-row-actions.lh-toolbar-strip {
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: nowrap;
     align-items: stretch;
-    width: 100%;
+    width: auto;
     max-width: 100%;
   }
 
   .cust-row-actions.lh-toolbar-strip > .btn {
-    flex: 0 0 auto !important;
-    width: 100% !important;
-    min-height: 2.5rem;
-    border-inline-start: none !important;
-    border-block-start: 1px solid var(--color-border) !important;
-    white-space: normal;
-    padding: 0.5rem 0.65rem !important;
-    font-size: 0.8rem !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    min-height: 2.35rem;
+    padding: 0.35rem 0.15rem !important;
+    border-inline-start: 1px solid var(--color-border) !important;
+    border-block-start: none !important;
+    white-space: nowrap;
+    font-size: 0 !important;
+    line-height: 1;
   }
 
   .cust-row-actions.lh-toolbar-strip > .btn:first-child {
+    border-inline-start: none !important;
     border-block-start: none !important;
+  }
+
+  .cust-row-actions--toolbar .cust-row-actions__txt {
+    display: none !important;
+  }
+
+  .cust-row-actions--toolbar .cust-row-actions__ico {
+    display: inline-block !important;
+    font-size: 1.05rem !important;
+    line-height: 1;
+    vertical-align: middle;
+  }
+
+  .cust-row-actions--toolbar .btn-issue .cust-row-actions__ico,
+  .cust-row-actions--toolbar .btn-detail .cust-row-actions__ico,
+  .cust-row-actions--toolbar .btn-edit .cust-row-actions__ico {
+    color: inherit;
   }
 }
 
@@ -1302,8 +1332,41 @@ textarea.form-control {
   }
 
   .cust-row-actions.lh-toolbar-strip > .btn {
-    font-size: 0.8rem !important;
-    padding: 0.5rem 0.65rem !important;
-    min-height: 2.5rem;
+    font-size: 0 !important;
+    padding: 0.3rem 0.08rem !important;
+    min-height: 2.3rem !important;
+  }
+
+  .cust-row-actions .cust-row-actions__ico {
+    font-size: 0.95rem !important;
+  }
+}
+
+/* بعد @media 900px — إبقاء أزرار العملاء بأيقونات فقط دون فرض نص/التفاف من شريط الأدوات */
+@media (max-width: 576px) {
+  .cust-row-actions.lh-toolbar-strip {
+    flex-direction: row !important;
+  }
+
+  .cust-row-actions.lh-toolbar-strip > .btn {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    line-height: 1 !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    border-block-start: none !important;
+    font-size: 0 !important;
+    padding: 0.35rem 0.12rem !important;
+    min-height: 2.35rem !important;
+  }
+
+  .cust-row-actions.lh-toolbar-strip > .btn:first-child {
+    border-inline-start: none !important;
+  }
+
+  .cust-row-actions--toolbar .cust-row-actions__ico {
+    font-size: 1.05rem !important;
   }
 }
