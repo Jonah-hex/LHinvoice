@@ -46,12 +46,16 @@
   .invoice-print-area {
     padding-top: 0 !important;
     zoom: 1 !important;
+    transform: none !important;
     max-width: none !important;
+    width: 100% !important;
+    overflow: visible !important;
   }
 
   .invoice-page-wrap {
     max-width: none !important;
-    margin: 0 !important;
+    width: auto !important;
+    margin: 0 auto !important;
   }
 
   .invoice-actions {
@@ -61,6 +65,7 @@
   .invoice-sheet {
     box-shadow: none !important;
     border: none !important;
+    /* يملأ عرض الورقة داخل هوامش @page — لا يُقص كما قد يحدث مع 210mm ثابت + هوامش */
     width: 100% !important;
     max-width: 210mm !important;
     min-height: 0 !important;
@@ -69,6 +74,10 @@
     padding: 8mm 10mm !important;
     display: block !important;
     overflow: visible !important;
+    zoom: 1 !important;
+    transform: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
     /* تجنّب كسر صفحة كاملة: إن تجاوزت الارتفاع تُقسّم الجداول طبيعياً */
     page-break-inside: auto;
     break-inside: auto;

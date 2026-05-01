@@ -402,20 +402,33 @@
 
 @media screen and (max-width: 900px) {
   /*
-   * تصغير موحّد للأزرار + صفحة A4 (~794px) حتى تظهر المعاينة كاملة
-   * دون قص أو تراكب (zoom يحدّث المساحة المشغولة في المتصفحات الحديثة).
+   * الفاتورة بعرض A4 الحقيقي (210mm) كالورق؛ تمرير أفقي على الشاشة الضيقة بدل zoom
+   * حتى تطابق المعاينة ما يُطبع.
    */
   .invoice-print-area {
     width: 100%;
     max-width: 100%;
-    zoom: min(1, max(0.32, calc((100vw - 3.25rem) / 794px)));
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
   }
 
   .invoice-sheet {
-    width: 100%;
+    width: 210mm;
+    max-width: none;
     min-height: auto;
-    padding: 12mm;
+    padding: 11mm 14mm;
+    margin-left: auto;
+    margin-right: auto;
   }
+
+  .invoice-page-wrap {
+    width: max-content;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .invoice-sheet__info-row {
     grid-template-columns: 1fr;
   }
