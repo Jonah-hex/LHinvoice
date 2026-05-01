@@ -1,0 +1,381 @@
+/**
+ * قالب الفاتورة A4 - معاينة احترافية
+ */
+
+.invoice-print-area {
+  padding-top: 0.5rem;
+  box-sizing: border-box;
+}
+
+.invoice-page-wrap {
+  max-width: 210mm;
+  margin: 0.65rem auto 1.25rem;
+}
+
+.invoice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  margin-bottom: 1.05rem;
+  padding: 0.85rem 0.9rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.invoice-sheet {
+  background: #fff;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 11mm 14mm;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  color: #1a1a1a;
+  font-size: 10.35pt;
+  line-height: 1.42;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-sheet__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+.invoice-sheet__logo {
+  max-width: 100px;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+.invoice-sheet__logo-placeholder {
+  width: 80px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--color-primary), #2d5080);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  font-weight: 800;
+  font-size: 1.25rem;
+  font-family: var(--font-heading);
+}
+
+.invoice-sheet__company {
+  flex: 1;
+  text-align: right;
+}
+
+.invoice-sheet__company-name {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin: 0 0 0.2rem;
+  font-family: var(--font-heading);
+}
+
+.invoice-sheet__meta-line {
+  font-size: 0.85rem;
+  color: #444;
+  margin: 0.1rem 0;
+}
+
+.invoice-sheet__company > .invoice-sheet__meta-line:first-of-type {
+  margin-top: calc(0.1rem + 7px);
+  padding-top: 0.32rem;
+  border-top: 1px solid #e2e6ea;
+}
+
+.invoice-sheet__type-badge {
+  text-align: center;
+  padding: 0.38rem 0.65rem;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.invoice-sheet__type-badge--tax {
+  background: rgba(25, 135, 84, 0.12);
+  color: #146c43;
+  border: 2px solid #198754;
+}
+
+.invoice-sheet__type-badge--simple {
+  background: rgba(30, 58, 95, 0.08);
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.invoice-sheet__info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.invoice-sheet__box {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 0.32rem 0.5rem;
+  background: #fafbfc;
+}
+
+.invoice-sheet__box-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.2rem;
+  text-transform: none;
+}
+
+.invoice-sheet__box p {
+  margin: 0.06rem 0;
+  line-height: 1.32;
+}
+
+.invoice-sheet__box p:first-of-type {
+  margin-top: 0;
+}
+
+.invoice-sheet__box p:last-of-type {
+  margin-bottom: 0;
+}
+
+.invoice-sheet__lines {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.7rem;
+  font-size: 9.25pt;
+}
+
+.invoice-sheet__lines th {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.38rem 0.35rem;
+  font-weight: 700;
+  border: 1px solid var(--color-primary);
+}
+
+.invoice-sheet__lines td {
+  border: 1px solid #dee2e6;
+  padding: 0.35rem 0.35rem;
+  vertical-align: top;
+}
+
+.invoice-sheet__lines tbody tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+.invoice-sheet__lines .num {
+  text-align: left;
+  direction: ltr;
+  unicode-bidi: embed;
+  white-space: nowrap;
+}
+
+.invoice-sheet__summary {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.7rem;
+}
+
+.invoice-sheet__summary-table {
+  width: 260px;
+  border-collapse: collapse;
+}
+
+.invoice-sheet__summary-table td {
+  padding: 0.28rem 0.45rem;
+  border: 1px solid #dee2e6;
+}
+
+.invoice-sheet__summary-table td:first-child {
+  font-weight: 600;
+  background: #f1f3f5;
+}
+
+.invoice-sheet__summary-table td:last-child {
+  text-align: left;
+  direction: ltr;
+  font-weight: 700;
+}
+
+.invoice-sheet__summary-table tr.grand td {
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.93rem;
+  border-color: var(--color-primary);
+}
+
+.invoice-sheet__words {
+  border: 1px dashed var(--color-accent);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 0.65rem;
+  font-style: italic;
+  color: #333;
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.invoice-sheet__words:has(+ .invoice-sheet__terms) {
+  margin-bottom: 0;
+}
+
+.invoice-sheet__terms {
+  margin-top: 15px;
+  margin-bottom: 0.65rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #dee2e6;
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.invoice-sheet__notes {
+  font-size: 0.82rem;
+  color: #555;
+  margin-bottom: 0.65rem;
+}
+
+.invoice-sheet__footer-stack {
+  /* يتبع المحتوى مباشرةً حتى لا تبقى مساحة بيضاء كبيرة بين الشروط والختم */
+  margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-sheet__footer {
+  margin-top: 0;
+  padding-top: 0.35rem;
+  border-top: none;
+  display: flex;
+  /* في RTL: flex-end = يسار الصفحة البصري */
+  justify-content: flex-end;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  color: #666;
+  overflow: visible;
+  align-items: flex-start;
+}
+
+.invoice-sheet__footer > .invoice-sheet__sign-wrap,
+.invoice-sheet__footer > .invoice-sheet__sign {
+  /* RTL: هامش من اليسار البصري يدفع العمود قليلاً نحو اليمين */
+  margin-inline-end: 1.65rem;
+}
+
+/* فاتورة بدون ختم: نفس عرض عمود الختم (160px) حتى يطابق سطر «التوقيع والختم» المختومة */
+.invoice-sheet__footer > .invoice-sheet__sign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 160px;
+  max-width: 100%;
+  min-width: 160px;
+}
+
+.invoice-sheet__sign-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: visible;
+  text-align: center;
+  margin-top: 0;
+}
+
+.invoice-sheet__stamp-wrap {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  width: 160px;
+  max-width: 160px;
+  min-width: 160px;
+  margin-top: -1.75rem;
+  margin-bottom: 0.35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.invoice-sheet__sign {
+  text-align: center;
+  padding-top: calc(1.85rem + 55px);
+}
+
+.invoice-sheet__sign--has-stamp {
+  padding-top: 0;
+  width: 100%;
+}
+
+.invoice-sheet__stamp {
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+  width: 160px;
+  height: 160px;
+  max-width: 160px;
+  min-width: 160px;
+  max-height: 160px;
+  object-fit: contain;
+  border: none;
+}
+
+.invoice-sheet__sign--has-stamp .invoice-sheet__sign-line {
+  margin-top: 0;
+}
+
+.invoice-sheet__sign-line {
+  border-top: 1px solid #333;
+  width: 70%;
+  margin: 0.55rem auto 0.2rem;
+  padding-top: 0.45rem;
+}
+
+.invoice-sheet__footer-thanks {
+  text-align: center;
+  margin: 0.65rem 0 0;
+  font-size: 0.78rem;
+  color: #888;
+}
+
+@media screen and (max-width: 900px) {
+  /*
+   * تصغير موحّد للأزرار + صفحة A4 (~794px) حتى تظهر المعاينة كاملة
+   * دون قص أو تراكب (zoom يحدّث المساحة المشغولة في المتصفحات الحديثة).
+   */
+  .invoice-print-area {
+    width: 100%;
+    max-width: 100%;
+    zoom: min(1, max(0.32, calc((100vw - 3.25rem) / 794px)));
+  }
+
+  .invoice-sheet {
+    width: 100%;
+    min-height: auto;
+    padding: 12mm;
+  }
+  .invoice-sheet__info-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* لا يُقصّ المحتوى بعد التصغير عندما تُخفّى السكربتات الأفقية في main.css */
+@media screen and (max-width: 992px) {
+  .app-content:has(.invoice-print-area) {
+    overflow-x: visible;
+  }
+}

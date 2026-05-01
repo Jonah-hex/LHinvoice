@@ -1,0 +1,82 @@
+/**
+ * طباعة A4 — إخفاء التنقل والأزرار دون كسر التخطيط
+ */
+
+@media print {
+  .no-print,
+  .app-sidebar,
+  .sidebar-backdrop,
+  .app-topbar,
+  .toast-container,
+  .menu-toggle,
+  .lh-confirm-root {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  /* يمنع امتداد ارتفاع الشاشة (100vh) من إجبار صفحة ثانية فارغة */
+  #app-shell.shell-v2 {
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  #app-shell.shell-v2 .app-main {
+    margin: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    display: block !important;
+    background: #fff !important;
+  }
+
+  .app-content {
+    padding: 0 !important;
+    max-width: none !important;
+    min-height: 0 !important;
+  }
+
+  .invoice-print-area {
+    padding-top: 0 !important;
+    zoom: 1 !important;
+    max-width: none !important;
+  }
+
+  .invoice-page-wrap {
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .invoice-actions {
+    display: none !important;
+  }
+
+  .invoice-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 210mm !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    padding: 8mm 10mm !important;
+    display: block !important;
+    overflow: visible !important;
+    /* تجنّب كسر صفحة كاملة: إن تجاوزت الارتفاع تُقسّم الجداول طبيعياً */
+    page-break-inside: auto;
+    break-inside: auto;
+    page-break-after: auto;
+  }
+
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+}
